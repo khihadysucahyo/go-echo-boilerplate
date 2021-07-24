@@ -11,7 +11,7 @@ import (
 	"github.com/khihadysucahyo/go-echo-boilerplate/server/routes"
 )
 
-// Start function
+// Start func
 func Start(cfg *config.Config) {
 	app := server.NewServer(cfg)
 
