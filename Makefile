@@ -1,7 +1,7 @@
 lint_docker_compose_file = "./development/golangci_lint/docker-compose.yml"
 
 run:
-	@echo "🌀 running app..."
+	@echo "🌀 running app...."
 	go run ./cmd/main.go
 
 migrate:
