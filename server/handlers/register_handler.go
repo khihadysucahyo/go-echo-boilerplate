@@ -3,8 +3,6 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/khihadysucahyo/go-echo-boilerplate/services/user"
-
 	s "github.com/khihadysucahyo/go-echo-boilerplate/server"
 
 	"github.com/khihadysucahyo/go-echo-boilerplate/responses"
@@ -26,17 +24,6 @@ func NewRegisterHandler(server *s.Server) *RegisterHandler {
 	return &RegisterHandler{server: server}
 }
 
-// Register godoc
-// @Summary Register
-// @Description New user registration
-// @ID user-register
-// @Tags User Actions
-// @Accept json
-// @Produce json
-// @Param params body requests.RegisterRequest true "User's email, user's password"
-// @Success 201 {object} responses.Data
-// @Failure 400 {object} responses.Error
-// @Router /register [post]
 func (registerHandler *RegisterHandler) Register(c echo.Context) error {
 	registerRequest := new(requests.RegisterRequest)
 
@@ -56,8 +43,7 @@ func (registerHandler *RegisterHandler) Register(c echo.Context) error {
 		return responses.ErrorResponse(c, http.StatusBadRequest, "User already exists")
 	}
 
-	userService := user.NewUserService(registerHandler.server.DB)
-	if err := userService.Register(registerRequest); err != nil {
+	if err := userRepository.Register(registerRequest); err != nil {
 		return responses.ErrorResponse(c, http.StatusInternalServerError, "Server error")
 	}
 

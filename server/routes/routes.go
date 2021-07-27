@@ -1,11 +1,9 @@
 package routes
 
 import (
-	"fmt"
-
 	sentryecho "github.com/getsentry/sentry-go/echo"
-	"github.com/khihadysucahyo/go-echo-boilerplate/services/token"
 
+	"github.com/khihadysucahyo/go-echo-boilerplate/repositories"
 	s "github.com/khihadysucahyo/go-echo-boilerplate/server"
 	"github.com/khihadysucahyo/go-echo-boilerplate/server/handlers"
 
@@ -18,11 +16,13 @@ func ConfigureRoutes(server *s.Server) {
 	authHandler := handlers.NewAuthHandler(server)
 	registerHandler := handlers.NewRegisterHandler(server)
 
-	server.Echo.Use(middleware.Logger())
-
-	server.Echo.Use(sentryecho.New(sentryecho.Options{
+	sentryMiddleware := sentryecho.New(sentryecho.Options{
 		Repanic: true,
-	}))
+	})
+
+	server.Echo.Use(middleware.Logger())
+	server.Echo.Use(middleware.Recover())
+	server.Echo.Use(sentryMiddleware)
 
 	server.Echo.GET("/swagger/*", echoSwagger.WrapHandler)
 
@@ -30,11 +30,9 @@ func ConfigureRoutes(server *s.Server) {
 	server.Echo.POST("/register", registerHandler.Register)
 	server.Echo.POST("/refresh", authHandler.RefreshToken)
 
-	fmt.Println(server.Config.Auth.AccessSecret)
-
 	r := server.Echo.Group("")
 	config := middleware.JWTConfig{
-		Claims:     &token.JwtCustomClaims{},
+		Claims:     &repositories.JwtCustomClaims{},
 		SigningKey: []byte(server.Config.Auth.AccessSecret),
 	}
 	r.Use(middleware.JWTWithConfig(config))

@@ -2,7 +2,7 @@ lint_docker_compose_file = "./development/golangci_lint/docker-compose.yml"
 # Definitions
 ROOT                    := $(PWD)
 GO_HTML_COV             := ./coverage.html
-GO_TEST_OUTFILE         := ./c.out
+GO_TEST_OUTFILE         := ./coverage.out
 GOLANG_DOCKER_IMAGE     := golang:1.15
 CC_TEST_REPORTER_ID		:= ${CC_TEST_REPORTER_ID}
 CC_PREFIX				:= github.com/khihadysucahyo/go-echo-boilerplate

@@ -4,8 +4,6 @@
 
 # Overview
 It's an API project based on Echo framework.
-Our aim is reducing development time on default features that you can meet very often when your work on API.
-There is a useful set of tools that described below. Feel free to contribute!
 
 ## What's inside:
 
@@ -51,41 +49,23 @@ Now, you are able to make requests which require authentication.
 
 3. **/db** has seeders and method for connecting to the database.
 
-4. **/deploy** contains the container (Docker) package configuration and template(docker-compose) for project deployment.
+4. **/migrations** has files for run migrations.
 
-5. **/migrations** has files for run migrations.
+5. **/models** includes structures describing data models.
 
-6. **/models** includes structures describing data models.
+6. **/repositories** contains methods for accesing entities from the database.
 
-7. **/repositories** contains methods for selecting entities from the database.
+7 **/requests** has structures describing the parameters of incoming requests, and validator.
 
-8. **/requests** has structures describing the parameters of incoming requests, and validator.
+8. **/responses** includes structures describing the parameters of outgoing response.
 
-9. **/responses** includes structures describing the parameters of outgoing response.
+9. **/server** is the main project folder. This folder contains the executable server.go.
 
-10. **/server** is the main project folder. This folder contains the executable server.go.
+10. **/server/builders** contains builders for initializing entities.
 
-11. **/server/builders** contains builders for initializing entities.
+11. **/server/handlers** contains request handlers.
 
-12. **/server/handlers** contains request handlers.
-
-13. **/server/routes** has a file for configuring routes.
-
-14. **/services** contains methods for creating entities.
-
-15. **/tests**  includes tests and test data.
-
-## Code quality
-For control code quality we are use [golangci-lint](https://github.com/golangci/golangci-lint).
-Golangci-lint is a linters aggregator.
-
-Why we use linters? Linters help us:
-1. Finding critical bugs
-2. Finding bugs before they go live
-3. Finding performance errors
-4. To speed up the code review, because reviewers do not spend time searching for syntax errors and searching for
-violations of generally accepted code style
-5. The quality of the code is guaranteed at a fairly high level.
+12. **/server/routes** has a file for configuring routes.
 
 ### How to use
 Linter tool wrapped to docker-compose and first of all need to build container with linters
@@ -96,19 +76,6 @@ To run project by makeFile
 
 - `make migrate`
 
-To migrate already migrations
-
-- `make lint-build`
-
-Next you need to run linter to check bugs ant errors
-
-- `make lint-check` - it will log to console what bugs and errors linters found
-
-Finally, you need to fix all problems manually or using autofixing (if it's supported by the linter)
-
-- `make lint-fix` 
-
-
 ## Libraries
 Migrations - https://github.com/ShkrutDenis/go-migrations
 
@@ -116,10 +83,6 @@ Jwt - https://github.com/dgrijalva/jwt-go
 
 Swagger - https://github.com/swaggo/echo-swagger
 
-Mocking db - https://github.com/selvatico/go-mocket
+Gomock - https://github.com/golang/mock
 
 Orm - https://github.com/jinzhu/gorm
-
-## License
-The project is developed by **JDS Backend Ceria**
-

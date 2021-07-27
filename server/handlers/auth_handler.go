@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	tokenservice "github.com/khihadysucahyo/go-echo-boilerplate/services/token"
-
 	"github.com/khihadysucahyo/go-echo-boilerplate/requests"
 
 	s "github.com/khihadysucahyo/go-echo-boilerplate/server"
@@ -29,17 +27,6 @@ func NewAuthHandler(server *s.Server) *AuthHandler {
 	return &AuthHandler{server: server}
 }
 
-// Login godoc
-// @Summary Authenticate a user
-// @Description Perform user login
-// @ID user-login
-// @Tags User Actions
-// @Accept json
-// @Produce json
-// @Param params body requests.LoginRequest true "User's credentials"
-// @Success 200 {object} responses.LoginResponse
-// @Failure 401 {object} responses.Error
-// @Router /login [post]
 func (authHandler *AuthHandler) Login(c echo.Context) error {
 	loginRequest := new(requests.LoginRequest)
 
@@ -59,7 +46,7 @@ func (authHandler *AuthHandler) Login(c echo.Context) error {
 		return responses.ErrorResponse(c, http.StatusUnauthorized, "Invalid credentials")
 	}
 
-	tokenService := tokenservice.NewTokenService(authHandler.server.Config)
+	tokenService := repositories.NewTokenRepository(authHandler.server.Config)
 	accessToken, exp, err := tokenService.CreateAccessToken(&user)
 	if err != nil {
 		return err
@@ -73,17 +60,6 @@ func (authHandler *AuthHandler) Login(c echo.Context) error {
 	return responses.Response(c, http.StatusOK, res)
 }
 
-// Refresh godoc
-// @Summary Refresh access token
-// @Description Perform refresh access token
-// @ID user-refresh
-// @Tags User Actions
-// @Accept json
-// @Produce json
-// @Param params body requests.RefreshRequest true "Refresh token"
-// @Success 200 {object} responses.LoginResponse
-// @Failure 401 {object} responses.Error
-// @Router /refresh [post]
 func (authHandler *AuthHandler) RefreshToken(c echo.Context) error {
 	refreshRequest := new(requests.RefreshRequest)
 	if err := c.Bind(refreshRequest); err != nil {
@@ -113,12 +89,12 @@ func (authHandler *AuthHandler) RefreshToken(c echo.Context) error {
 		return responses.ErrorResponse(c, http.StatusUnauthorized, "User not found")
 	}
 
-	tokenService := tokenservice.NewTokenService(authHandler.server.Config)
-	accessToken, exp, err := tokenService.CreateAccessToken(user)
+	tokenRepo := repositories.NewTokenRepository(authHandler.server.Config)
+	accessToken, exp, err := tokenRepo.CreateAccessToken(user)
 	if err != nil {
 		return err
 	}
-	refreshToken, err := tokenService.CreateRefreshToken(user)
+	refreshToken, err := tokenRepo.CreateRefreshToken(user)
 	if err != nil {
 		return err
 	}
