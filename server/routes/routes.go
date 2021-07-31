@@ -11,12 +11,19 @@ import (
 
 	"github.com/labstack/echo/v4/middleware"
 	echoSwagger "github.com/swaggo/echo-swagger"
+
+	sentryTransaction "github.com/khihadysucahyo/go-echo-boilerplate/middleware"
 )
 
 func ConfigureRoutes(server *s.Server) {
 	postHandler := handlers.NewPostHandlers(server)
 	authHandler := handlers.NewAuthHandler(server)
 	registerHandler := handlers.NewRegisterHandler(server)
+
+	// record transaction for sentry apm
+	sentryMiddleware := sentryTransaction.InitMiddleware()
+	server.Echo.Use(sentryMiddleware.CORS)
+	server.Echo.Use(sentryMiddleware.SENTRY)
 
 	server.Echo.Use(middleware.Logger())
 
